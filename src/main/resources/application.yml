@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: pastebin
+  datasource:
+    hikari:
+      connection-test-query: SELECT 1
+      minimum-idle: 1
+      maximum-pool-size: 5
+    driver-class-name: org.postgresql.Driver
+    url: ${PG_URL}
+    password: ${PG_PASSWORD}
+    username: ${PG_USER}
+    initialization-mode: always
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: true
+        ddl-auto: none
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml
+
+
+server:
+  port: ${SERVER_PORT:8080}

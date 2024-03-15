@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: 140324-01-init
+      author: a.sinayko
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: users
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+#                    nullable: false
+              - column:
+                  name: user_name
+                  type: varchar(50)
+#                  nullable: false
+
+  - changeSet:
+      id: 140324-02-init
+      author: a.sinayko
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: s3_mapping
+      changes:
+        - createTable:
+            tableName: s3_mapping
+            columns:
+              - column:
+                  name: id
+                  type: varchar(8)
+                  constraints:
+                    primaryKey: true
+#                    nullable: false
+              - column:
+                  name: date_created
+                  type: TIMESTAMP
+              - column:
+                  name: date_expiration
+                  type: TIMESTAMP
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+#                    nullable: false
+                    foreignKeyName: fk_user_id
+                    referencedTableName: users
+                    referencedColumnNames: id
+
+  - changeSet:
+      id: 150324-01-init
+      author: a.sinayko
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          sequenceExists:
+            sequenceName: users_id_seq
+      changes:
+        - createSequence:
+            sequenceName: users_id_seq
+            incrementBy: 1
+            minValue: 1000
+            startValue: 1000
+            dataType: int
+        - addDefaultValue:
+            tableName: users
+            columnName: id
+            defaultValueSequenceNext: users_id_seq
