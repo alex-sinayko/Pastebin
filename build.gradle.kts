@@ -19,9 +19,15 @@ dependencies {
     compileOnly ("org.projectlombok:lombok")
     runtimeOnly ("org.postgresql:postgresql")
     annotationProcessor ("org.projectlombok:lombok")
+    implementation("io.awspring.cloud:spring-cloud-aws-dependencies:3.1.0")
+    implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.0")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("com.adobe.testing:s3mock:3.5.0")
+    testImplementation("com.adobe.testing:s3mock-testcontainers:3.5.0")
+    testImplementation("org.testcontainers:junit-jupiter:1.19.6")
+    testImplementation("software.amazon.awssdk:url-connection-client:2.20.52")
 }
 
 tasks.test {
