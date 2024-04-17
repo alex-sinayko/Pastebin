@@ -30,7 +30,7 @@ public class TextServiceImpl implements TextService {
     @Override
     public TextCreateResponse save(String text, Integer days) {
         var uniq = hgService.getId();
-        var s3resp = s3Service.storeObject(hgService.getId(), text, days);
+        var s3resp = s3Service.storeObject(uniq, text, days);
         var response = new TextCreateResponse(url + "text/" + uniq, LocalDateTime.now());
         return response;
     }
