@@ -36,7 +36,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: varchar(8)
+                  type: varchar(36)
                   constraints:
                     primaryKey: true
 #                    nullable: false
@@ -74,3 +74,15 @@ databaseChangeLog:
             tableName: users
             columnName: id
             defaultValueSequenceNext: users_id_seq
+
+  - changeSet:
+      id: 170424-01-init
+      author: a.sinayko
+      preConditions:
+        onFail: MARK_RAN
+        sqlCheck:
+          expectedResult: 0
+          sql: SELECT COUNT(1) FROM users
+      changes:
+        - sql:
+            sql: insert into users (id, user_name) VALUES (1000, DEFAULT);
