@@ -35,9 +35,10 @@ public class TextServiceImpl implements TextService {
     @Override
     public TextCreateResponse save(String text, Integer days) {
         var uniq = hgService.getId();
-        var s3resp = s3Service.storeObject(uniq, text, days);
-        saveS3Mapping(uniq, days);
-        var response = new TextCreateResponse(url + "text/" + uniq, LocalDateTime.now());
+        s3Service.storeObject(uniq, text, days);
+        saveS3Mapping(uniq, days, Instant.now());
+        var expDate = convertDate(s3Service.getObject(uniq).response().expires());
+        var response = new TextCreateResponse(url + "text/" + uniq, expDate);
         return response;
     }
 
@@ -68,11 +69,12 @@ public class TextServiceImpl implements TextService {
         return LocalDateTime.ofInstant(instant, ZoneOffset.systemDefault());
     }
 
-    private S3Mapping saveS3Mapping(String uniq, int days) {
+    private S3Mapping saveS3Mapping(String uniq, int days, Instant createDate) {
         var s3m = new S3Mapping();
+        var currentDateTime = LocalDateTime.now();
         s3m.setId(uniq);
-        s3m.setDateCreated(LocalDateTime.now());
-        s3m.setDateExpiration(LocalDateTime.now().plusDays(days));
+        s3m.setDateCreated(currentDateTime);
+        s3m.setDateExpiration(currentDateTime.plusDays(days));
         s3m.setUser(User.defaultUser());
         return s3MappingService.save(s3m);
 
