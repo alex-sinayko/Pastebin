@@ -6,6 +6,9 @@ import dev.sinayko.pastebin.repository.S3MappingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class S3MappingServiceImpl implements S3MappingService {
@@ -38,5 +41,15 @@ public class S3MappingServiceImpl implements S3MappingService {
     public void delete(String id) {
         repository.deleteById(id);
 
+    }
+
+    @Override
+    public List<S3Mapping> findByExpDateBefore(LocalDateTime dateTime) {
+        return repository.findByDateExpirationBefore(dateTime);
+    }
+
+    @Override
+    public void deleteBulk(List<String> list) {
+        repository.deleteAllByIdInBatch(list);
     }
 }
